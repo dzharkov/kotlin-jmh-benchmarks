@@ -10,17 +10,27 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.SampleTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class SimpleElvisTestJava {
 
     @GenerateMicroBenchmark
     public void solve(BlackHole bh)  {
         int q = ElvisTestData.count;
+        ElvisTestData.init();
         while (q-->0) {
             ElvisTestData instance = ElvisTestData.nextInstance();
             ElvisTestData instance1 = ElvisTestData.nextInstance();
-            bh.consume((instance != null ? instance.value : 1) * ((instance1 != null ? instance1.value : 5)));
+            bh.consume((instance != null ? instance.value : ElvisTestData.next()) * ((instance1 != null ? instance1.value : ElvisTestData.next())));
         }
+    }
+
+    public static void main(String[] args) throws RunnerException {
+        Options opt = new OptionsBuilder()
+                .include(".*" + SimpleElvisTestJava.class.getSimpleName() + ".*")
+                .forks(1)
+                .build();
+
+        new Runner(opt).run();
     }
 }

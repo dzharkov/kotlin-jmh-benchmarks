@@ -5,33 +5,69 @@ import org.openjdk.jmh.logic.BlackHole
 
 import java.util.Comparator
 import java.util.concurrent.TimeUnit
+import org.openjdk.jmh.runner.options.OptionsBuilder
+import org.openjdk.jmh.runner.Runner
+
+import org.jetbrains.benchmarks.StarsKotlin.AVLTree.Node
+import java.util.Random
+
+
 /**
  * @author Denis Zharkov
  */
 [State(Scope.Thread)]
-[BenchmarkMode(Mode.AverageTime) ]
+[BenchmarkMode(Mode.All) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
 open public class SimpleElvisTestKotlin() {
+    [State(Scope.Benchmark)]
+    public var array : Array<ElvisTestData?> = Array<ElvisTestData?>(ElvisTestData.arraySize, { null; })
 
-    [GenerateMicroBenchmark]
-    public fun solve1(bh : BlackHole)  {
-        var q = ElvisTestData.count
-        while (q-- > 0)
-        {
-            val instance = ElvisTestData.nextInstance()
-            val instance1 = ElvisTestData.nextInstance()
-            bh.consume((instance?.value ?: 1) * (instance1?.value ?: 5))
+    [State(Scope.Benchmark)]
+    public var steps : IntArray = IntArray(2 * array.size)
+
+    [State(Scope.Benchmark)]
+    public var result : Int = 0
+    [State(Scope.Benchmark)]
+    public var step : Int = 0
+    [State(Scope.Benchmark)]
+    public var random : Random = Random(123)
+
+    [Setup]
+    public fun init() {
+        random = Random(123)
+        for (i in 1..array.size-1) {
+            array[i] = if (random.nextInt(10) < 7) null else ElvisTestData(random.nextInt())
         }
+        for (i in 0..steps.size-1) {
+            steps[i] = random.nextInt(array.size - 1)
+        }
+
+        step = 0
     }
 
     [GenerateMicroBenchmark]
-    public fun solve2(bh : BlackHole)  {
-        var q = ElvisTestData.count
-        while (q-- > 0)
-        {
-            val instance = ElvisTestData.nextInstance()
-            val instance1 = ElvisTestData.nextInstance()
-            bh.consume((if (instance != null) instance.value else 1) * (if (instance1 != null) instance1.value else 5))
+    public fun withElvis(bh: BlackHole) {
+        if (step > steps.size - 2) {
+            step = 0
         }
+        var next = steps[step++]
+        val obj = array[next]
+        bh.consume(obj?.value ?: steps[step++])
+    }
+
+    [GenerateMicroBenchmark]
+    public fun withoutElvis(bh: BlackHole) {
+        if (step > steps.size - 2) {
+            step = 0
+        }
+        var next = steps[step++]
+        val obj = array[next]
+        bh.consume(if (obj != null) obj.value else steps[step++] )
+    }
+
+    public fun main(args: Array<String>) {
+        val opt = OptionsBuilder().include(".*" + javaClass<SimpleElvisTestKotlin>().getSimpleName() + ".*")?.forks(1)?.build()
+
+        Runner(opt).run()
     }
 }
