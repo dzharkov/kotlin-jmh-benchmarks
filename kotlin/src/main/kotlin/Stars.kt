@@ -5,9 +5,10 @@ import org.openjdk.jmh.logic.BlackHole
 
 import java.util.Comparator
 import java.util.concurrent.TimeUnit
+
 /**
  * @author Denis Zharkov
-*/
+ */
 [State(Scope.Thread)]
 [BenchmarkMode(Mode.AverageTime) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
@@ -17,8 +18,26 @@ open public class StarsKotlin() {
             return lhs!!.compareTo(rhs!!)
         }
     }
+
     open class AVLTree<K, D>(var comparator : Comparator<K?>) {
-        open public class Node<K,D>(var key : K, var data : D) {
+
+        class NodeGetter {
+            fun height<K, D>(node : Node<K, D>?) : Int {
+                return node?.height ?: 0
+            }
+
+            fun size<K, D>(node : Node<K, D>?) : Int {
+                return node?.size ?: 0
+            }
+        }
+
+        class object {
+            val ng : NodeGetter = NodeGetter()
+        }
+
+
+        inner class Node<K,D>(var key : K, var data : D) {
+
             var size : Int = 1
             var left : Node<K,D>? = null
                 set(value) {
@@ -44,24 +63,27 @@ open public class StarsKotlin() {
             var height : Int = 1
             var balance : Int = 0
             fun updateHeight() : Unit {
-                val curLeft = left
-                val curRight = right
-                val leftHeight = curLeft?.height ?: 0
-                val rightHeight = curRight?.height ?: 0
+                val leftHeight = ng.height<K,D>(left)
+                val rightHeight = ng.height(right)
                 height = 1 + Math.max(leftHeight, rightHeight)
             }
             fun updateBalance() : Unit {
                 left?.updateHeight()
                 right?.updateHeight()
-
-                val curLeft = left
-                val curRight = right
-                val leftHeight = curLeft?.height ?: 0
-                val rightHeight = curRight?.height ?: 0
+                val leftHeight = ng.height<K,D>(left)
+                val rightHeight = ng.height(right)
                 balance = leftHeight - rightHeight
             }
-            open fun onChildrenChange() : Unit {
+
+            fun onChildrenChange() : Unit {
                 updateBalance()
+                updateSize()
+            }
+
+            fun updateSize() : Unit {
+                val leftSize = ng.size(left)
+                val rightSize = ng.size(right)
+                size = 1 + leftSize +  rightSize
             }
         }
         protected open fun buildNode<K,D>(key : K, data : D) : Node<K,D> {
@@ -157,27 +179,6 @@ open public class StarsKotlin() {
             this.comparator = comparator
         }
 
-    }
-
-    class OrderAVLTree<K, D>(comparator : Comparator<K?>) : AVLTree<K, D>(comparator) {
-        class SizedNode<K,D>(key : K, data : D) : AVLTree<K, D>.Node<K,D>(key, data) {
-
-            override fun onChildrenChange() : Unit {
-                super.onChildrenChange()
-                updateSize()
-            }
-
-            fun updateSize() : Unit {
-                val curLeft = left
-                val curRight = right
-                val leftSize = curLeft?.size ?: 0
-                val rightSize = curRight?.size ?: 0
-                size = 1 + leftSize + rightSize
-            }
-        }
-        protected override fun buildNode<K,D>(key : K, data : D) : AVLTree<K, D>.Node<K,D> {
-            return SizedNode<K,D>(key, data)
-        }
         fun elementOrder(key : K) : Int {
             var node = find(key)
             if (node == null)
@@ -190,7 +191,7 @@ open public class StarsKotlin() {
             {
                 if (node!!.left != null)
                 {
-                    result += ((node!!.left as SizedNode<K,D>)).size
+                    result += ((node!!.left as Node<K,D>)).size
                 }
 
                 while (node!!.parent?.left == node)
@@ -208,8 +209,8 @@ open public class StarsKotlin() {
             return result
         }
 
-
     }
+
     class PointY(var y : Int, var id : Int) : Comparable<PointY> {
         public override fun compareTo(o : PointY) : Int {
             if (y != o.y)
@@ -223,7 +224,7 @@ open public class StarsKotlin() {
 
     [GenerateMicroBenchmark]
     public fun solve(bh : BlackHole) : Unit {
-        val tree = OrderAVLTree<PointY, Int>(ComparableComparator<PointY>())
+        val tree = AVLTree<PointY, Int>(ComparableComparator<PointY>())
         val n = StarsData.getN()
         val result = IntArray(n)
         for (i in 0..n - 1) {

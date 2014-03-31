@@ -1,11 +1,14 @@
 package org.jetbrains.benchmarks;
 
+import java.util.Random;
+
 /**
  * @author Denis Zharkov
  */
 public class StarsData {
+    public static Random random = new Random(123);
     public static int getN() {
-        step = 500000;
+        random = new Random(123);
         return 100000;
     }
 
@@ -14,9 +17,9 @@ public class StarsData {
 
     public static int getX() {
         if (step %2 == 0) {
-            currentX += 10 * step;
+            currentX += 10 * random.nextInt();
         } else {
-            currentX -= 5 * step;
+            currentX -= 5 * random.nextInt();
         }
 
         step++;
