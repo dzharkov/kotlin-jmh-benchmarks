@@ -1,0 +1,78 @@
+1,3c1,3
+< Compiled from "Stars.kt"
+< public final class org.jetbrains.benchmarks.StarsKotlin$AVLTree$NodeGetter implements kotlin.jvm.internal.KObject {
+<   public final <K extends java/lang/Object, D extends java/lang/Object> int height(org.jetbrains.benchmarks.StarsKotlin$AVLTree$Node<K, D>);
+---
+> Compiled from "StarsFaster.kt"
+> public final class org.jetbrains.benchmarks.StarsKotlinFaster$AVLTree$NodeGetter implements kotlin.jvm.internal.KObject {
+>   public final <K extends java/lang/Object, D extends java/lang/Object> int height(org.jetbrains.benchmarks.StarsKotlinFaster$AVLTree$Node<K, D>);
+5,20c5,15
+<        0: aload_1       
+<        1: dup           
+<        2: ifnull        14
+<        5: invokevirtual #27                 // Method org/jetbrains/benchmarks/StarsKotlin$AVLTree$Node.getHeight:()I
+<        8: invokestatic  #33                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+<       11: goto          16
+<       14: pop           
+<       15: aconst_null   
+<       16: dup           
+<       17: ifnull        29
+<       20: checkcast     #35                 // class java/lang/Number
+<       23: invokevirtual #38                 // Method java/lang/Number.intValue:()I
+<       26: goto          31
+<       29: pop           
+<       30: iconst_0      
+<       31: ireturn       
+---
+>        0: iconst_1      
+>        1: aload_1       
+>        2: ifnonnull     7
+>        5: pop           
+>        6: iconst_0      
+>        7: ifeq          17
+>       10: aload_1       
+>       11: invokevirtual #27                 // Method org/jetbrains/benchmarks/StarsKotlinFaster$AVLTree$Node.getHeight:()I
+>       14: goto          18
+>       17: iconst_0      
+>       18: ireturn       
+22c17
+<   public final <K extends java/lang/Object, D extends java/lang/Object> int size(org.jetbrains.benchmarks.StarsKotlin$AVLTree$Node<K, D>);
+---
+>   public final <K extends java/lang/Object, D extends java/lang/Object> int size(org.jetbrains.benchmarks.StarsKotlinFaster$AVLTree$Node<K, D>);
+24,39c19,29
+<        0: aload_1       
+<        1: dup           
+<        2: ifnull        14
+<        5: invokevirtual #45                 // Method org/jetbrains/benchmarks/StarsKotlin$AVLTree$Node.getSize:()I
+<        8: invokestatic  #33                 // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+<       11: goto          16
+<       14: pop           
+<       15: aconst_null   
+<       16: dup           
+<       17: ifnull        29
+<       20: checkcast     #35                 // class java/lang/Number
+<       23: invokevirtual #38                 // Method java/lang/Number.intValue:()I
+<       26: goto          31
+<       29: pop           
+<       30: iconst_0      
+<       31: ireturn       
+---
+>        0: iconst_1      
+>        1: aload_1       
+>        2: ifnonnull     7
+>        5: pop           
+>        6: iconst_0      
+>        7: ifeq          17
+>       10: aload_1       
+>       11: invokevirtual #34                 // Method org/jetbrains/benchmarks/StarsKotlinFaster$AVLTree$Node.getSize:()I
+>       14: goto          18
+>       17: iconst_0      
+>       18: ireturn       
+41c31
+<   public org.jetbrains.benchmarks.StarsKotlin$AVLTree$NodeGetter();
+---
+>   public org.jetbrains.benchmarks.StarsKotlinFaster$AVLTree$NodeGetter();
+44c34
+<        1: invokespecial #50                 // Method java/lang/Object."<init>":()V
+---
+>        1: invokespecial #39                 // Method java/lang/Object."<init>":()V
