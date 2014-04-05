@@ -36,7 +36,7 @@ open public class SimpleElvisTestKotlin() {
     public fun init() {
         random = Random(123)
         for (i in 1..array.size-1) {
-            array[i] = if (random.nextInt(1000) < 900) null else ElvisTestData(random.nextInt())
+            array[i] = if (random.nextInt(1000) == 1) null else ElvisTestData(random.nextInt())
         }
         for (i in 0..steps.size-1) {
             steps[i] = random.nextInt(array.size - 1)
