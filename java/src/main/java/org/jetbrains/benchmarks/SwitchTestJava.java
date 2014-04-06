@@ -1,6 +1,7 @@
 package org.jetbrains.benchmarks;
 
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.logic.BlackHole;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,15 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class SwitchTestJava {
     public static final int ITERATIONS = 100000000;
 
-    int g(int u) {
-        if (u > 100) {
-            return 0;
-        }
-
-        return u+10;
-    }
-
-    int f1(int u) {
+    int sparseSwitch(int u) {
         int t;
         switch (u) {
             case (1):
@@ -91,19 +84,17 @@ public class SwitchTestJava {
                 t = 5;
         }
 
-        return g(t);
+        return t;
     }
 
     @GenerateMicroBenchmark
-    public int testSwitch1() {
-        int sum = 0;
+    public void testSparseSwitch(BlackHole bh) {
         for (int i = 0; i < ITERATIONS; i++) {
-            sum += f1(i);
+            bh.consume(sparseSwitch(i));
         }
-        return sum;
     }
 
-    int f2(int u) {
+    int denseSwitch(int u) {
         int t;
         switch (u) {
             case (1):
@@ -173,15 +164,13 @@ public class SwitchTestJava {
                 t = 5;
         }
 
-        return g(t);
+        return t;
     }
 
     @GenerateMicroBenchmark
-    public int testSwitch2() {
-        int sum = 0;
+    public void testDenseSwitch(BlackHole bh) {
         for (int i = 0; i < ITERATIONS; i++) {
-            sum += f2(i);
+            bh.consume(denseSwitch(i));
         }
-        return sum;
     }
 }
