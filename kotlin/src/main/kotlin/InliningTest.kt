@@ -10,8 +10,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.Closeable
 
-inline fun almostDoNothing(y : Int, block : () -> Int) : Int {
-
+inline fun doAlmostNothing(y : Int, block : () -> Int) : Int {
     return block() + y
 }
 
@@ -23,10 +22,6 @@ open class InliningTest {
     public var one1 : Int = 1
     [State(Scope.Benchmark)]
     public var one2 : Int = 1
-    [State(Scope.Benchmark)]
-    public var one3 : Int = 1
-    [State(Scope.Benchmark)]
-    public var one4 : Int = 1
 
     [GenerateMicroBenchmark]
     fun inliningIdeal() : Int {
@@ -37,17 +32,8 @@ open class InliningTest {
     [GenerateMicroBenchmark]
     fun valInlining() : Int {
         val x = one1
-        return almostDoNothing(1) {
+        return doAlmostNothing(1) {
             x + one2
-        }
-    }
-
-    [GenerateMicroBenchmark]
-    fun varInlining() : Int {
-        var x = one1
-        return almostDoNothing(1) {
-            x += one2
-            x
         }
     }
 }

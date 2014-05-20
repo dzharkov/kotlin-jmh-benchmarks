@@ -61,7 +61,7 @@ public class MergeSortJava {
 
         for (int i = 1; i < size; i++) {
             if (a[i] < a[i - 1]) {
-                throw new RuntimeException("fsdfds");
+                throw new RuntimeException();
             }
         }
     }
