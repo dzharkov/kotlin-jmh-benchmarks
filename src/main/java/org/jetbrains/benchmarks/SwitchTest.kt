@@ -1,14 +1,11 @@
 package org.jetbrains.benchmarks
 
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.logic.BlackHole
 
 import java.util.Comparator
 import java.util.concurrent.TimeUnit
+import org.openjdk.jmh.infra.*
 
-/**
- * @author Denis Zharkov
- */
 [State(Scope.Thread)]
 [BenchmarkMode(Mode.AverageTime) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
@@ -86,8 +83,8 @@ public open class SwitchTestKotlin() {
         return t
     }
 
-    [GenerateMicroBenchmark]
-    public open fun testSparseSwitch(bh : BlackHole) {
+    [Benchmark]
+    public open fun testSparseSwitch(bh : Blackhole) {
         val n = ITERATIONS
         for (i in 0..n - 1) {
             bh.consume(sparseSwitch(i))
@@ -166,8 +163,8 @@ public open class SwitchTestKotlin() {
         }
         return t
     }
-    [GenerateMicroBenchmark]
-    public open fun testDenseSwitch(bh : BlackHole) {
+    [Benchmark]
+    public open fun testDenseSwitch(bh : Blackhole) {
         val n = ITERATIONS
         for (i in 0..n - 1) {
             bh.consume(denseSwitch(i))

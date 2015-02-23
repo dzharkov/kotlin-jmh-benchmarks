@@ -1,7 +1,7 @@
 package org.jetbrains.benchmarks;
 
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.logic.BlackHole;
+import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
@@ -270,8 +270,8 @@ public class StarsJava {
         }
     }
 
-    @GenerateMicroBenchmark
-    public void solve(BlackHole bh) {
+    @Benchmark
+    public void solve(Blackhole bh) {
         OrderAVLTree<PointY,Integer> tree = new OrderAVLTree<PointY, Integer>(new ComparableComparator<PointY>());
 
         int n = StarsData.getN();

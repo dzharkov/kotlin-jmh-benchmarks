@@ -2,9 +2,6 @@ package org.jetbrains.benchmarks;
 
 import java.util.Random;
 
-/**
- * @author Denis Zharkov
- */
 public class StarsData {
     public static Random random = new Random(123);
     public static int getN() {

@@ -1,13 +1,10 @@
 package org.jetbrains.benchmarks;
 
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.logic.BlackHole;
+import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author Denis Zharkov
- */
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -87,8 +84,8 @@ public class SwitchTestJava {
         return t;
     }
 
-    @GenerateMicroBenchmark
-    public void testSparseSwitch(BlackHole bh) {
+    @Benchmark
+    public void testSparseSwitch(Blackhole bh) {
         for (int i = 0; i < ITERATIONS; i++) {
             bh.consume(sparseSwitch(i));
         }
@@ -167,8 +164,8 @@ public class SwitchTestJava {
         return t;
     }
 
-    @GenerateMicroBenchmark
-    public void testDenseSwitch(BlackHole bh) {
+    @Benchmark
+    public void testDenseSwitch(Blackhole bh) {
         for (int i = 0; i < ITERATIONS; i++) {
             bh.consume(denseSwitch(i));
         }

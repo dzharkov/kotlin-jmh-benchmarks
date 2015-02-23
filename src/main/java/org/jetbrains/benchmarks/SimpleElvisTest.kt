@@ -1,7 +1,6 @@
 package org.jetbrains.benchmarks
 
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.logic.BlackHole
 
 import java.util.Comparator
 import java.util.concurrent.TimeUnit
@@ -10,6 +9,7 @@ import org.openjdk.jmh.runner.Runner
 
 import org.jetbrains.benchmarks.StarsKotlin.AVLTree.Node
 import java.util.Random
+import org.openjdk.jmh.infra.*
 
 
 /**
@@ -19,17 +19,12 @@ import java.util.Random
 [BenchmarkMode(Mode.All) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
 open public class SimpleElvisTestKotlin() {
-    [State(Scope.Benchmark)]
     public var array : Array<ElvisTestData?> = Array<ElvisTestData?>(ElvisTestData.arraySize, { null; })
 
-    [State(Scope.Benchmark)]
     public var steps : IntArray = IntArray(2 * array.size)
 
-    [State(Scope.Benchmark)]
     public var result : Int = 0
-    [State(Scope.Benchmark)]
     public var step : Int = 0
-    [State(Scope.Benchmark)]
     public var random : Random = Random(123)
 
     [Setup]
@@ -45,8 +40,8 @@ open public class SimpleElvisTestKotlin() {
         step = 0
     }
 
-    [GenerateMicroBenchmark]
-    public fun withElvis(bh: BlackHole) {
+    [Benchmark]
+    public fun withElvis(bh: Blackhole) {
         if (step > steps.size - 2) {
             step = 0
         }
@@ -55,8 +50,8 @@ open public class SimpleElvisTestKotlin() {
         bh.consume(obj?.value ?: steps[step++])
     }
 
-    [GenerateMicroBenchmark]
-    public fun withoutElvis(bh: BlackHole) {
+    [Benchmark]
+    public fun withoutElvis(bh: Blackhole) {
         if (step > steps.size - 2) {
             step = 0
         }

@@ -49,7 +49,7 @@ public class MergeSortJava {
         System.arraycopy(helper, 0, a, from, k);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void testMethod() {
         int size = this.size;
         int[] a = new int[size];

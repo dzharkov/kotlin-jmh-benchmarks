@@ -1,10 +1,7 @@
 package org.jetbrains.benchmarks
 
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark
-import org.openjdk.jmh.annotations.Scope
 import org.openjdk.jmh.annotations.*
 import java.util.concurrent.TimeUnit
-import org.openjdk.jmh.logic.BlackHole
 
 [State(Scope.Thread)]
 [BenchmarkMode(Mode.AverageTime) ]
@@ -48,7 +45,7 @@ open class MergeSortKotlin {
         System.arraycopy(helper, 0, a, from, k)
     }
 
-    [GenerateMicroBenchmark]
+    [Benchmark]
     fun testMethod() {
         val size = size
         val a = IntArray(size)

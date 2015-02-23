@@ -1,7 +1,7 @@
 package org.jetbrains.benchmarks;
 
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.logic.BlackHole;
+import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class SimpleElvisTestJava {
 
-    @GenerateMicroBenchmark
-    public void solve(BlackHole bh)  {
+    @Benchmark
+    public void solve(Blackhole bh)  {
         int q = ElvisTestData.count;
         ElvisTestData.init();
         while (q-->0) {

@@ -2,9 +2,6 @@ package org.jetbrains.benchmarks;
 
 import java.util.Random;
 
-/**
- * @author Denis Zharkov
- */
 public class ElvisTestData {
     public int value;
 

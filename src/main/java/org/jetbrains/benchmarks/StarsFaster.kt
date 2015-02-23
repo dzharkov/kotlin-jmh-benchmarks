@@ -1,10 +1,10 @@
 package org.jetbrains.benchmarks
 
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.logic.BlackHole
 
 import java.util.Comparator
 import java.util.concurrent.TimeUnit
+import org.openjdk.jmh.infra.*
 
 /**
  * @author Denis Zharkov
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 [State(Scope.Thread)]
 [BenchmarkMode(Mode.AverageTime) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
-open public class StarsKotlin() {
+open public class StarsKotlinFaster() {
     public open class ComparableComparator<T : Comparable<T>>() : Comparator<T?> {
         public override fun compare(lhs : T?, rhs : T?) : Int {
             return lhs!!.compareTo(rhs!!)
@@ -23,11 +23,11 @@ open public class StarsKotlin() {
 
         class NodeGetter {
             fun height<K, D>(node : Node<K, D>?) : Int {
-                return node?.height ?: 0
+                return if (node != null) node.height else 0
             }
 
             fun size<K, D>(node : Node<K, D>?) : Int {
-                return node?.size ?: 0
+                return if (node != null) node.size else 0
             }
         }
 
@@ -222,8 +222,8 @@ open public class StarsKotlin() {
         }
     }
 
-    [GenerateMicroBenchmark]
-    public fun solve(bh : BlackHole) : Unit {
+    [Benchmark]
+    public fun solve(bh : Blackhole) : Unit {
         val tree = AVLTree<PointY, Int>(ComparableComparator<PointY>())
         val n = StarsData.getN()
         val result = IntArray(n)
