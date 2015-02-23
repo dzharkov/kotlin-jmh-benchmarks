@@ -15,55 +15,52 @@ import org.openjdk.jmh.infra.*
 /**
  * @author Denis Zharkov
  */
-[State(Scope.Thread)]
-[BenchmarkMode(Mode.All) ]
+[State(Scope.Benchmark)]
+[BenchmarkMode(Mode.AverageTime) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
-open public class SimpleElvisTestKotlin() {
-    public var array : Array<ElvisTestData?> = Array<ElvisTestData?>(ElvisTestData.arraySize, { null; })
+open public class SimpleElvisTestKotlin {
+    data class Data(val x: Int)
 
-    public var steps : IntArray = IntArray(2 * array.size)
+    //[Param("100", "1000", "1000000")]
+    [Param("1000")]
+    var size: Int = 0
 
-    public var result : Int = 0
-    public var step : Int = 0
-    public var random : Random = Random(123)
+    [Param("0.5")]
+    var nullFrequency: Double = 0.0
 
-    [Setup]
-    public fun init() {
-        random = Random(123)
-        for (i in 1..array.size-1) {
-            array[i] = if (random.nextInt(1000) == 1) null else ElvisTestData(random.nextInt())
+    var data: Array<Data?> = Array(1) { Data(1) }
+
+    Setup fun init() {
+        val random = Random(123)
+        data = Array(size) {
+            if (random.nextDouble() < nullFrequency) null else Data(random.nextInt())
         }
-        for (i in 0..steps.size-1) {
-            steps[i] = random.nextInt(array.size - 1)
-        }
-
-        step = 0
     }
+
+    [CompilerControl(CompilerControl.Mode.DONT_INLINE)]
+    fun withElvisWork(obj: Data?) = obj?.x ?: 1
 
     [Benchmark]
     public fun withElvis(bh: Blackhole) {
-        if (step > steps.size - 2) {
-            step = 0
+        val d = data
+        val size = this.size
+        for (i in 0..size - 1) {
+            val obj = d[i]
+            bh.consume(withElvisWork(obj))
         }
-        var next = steps[step++]
-        val obj = array[next]
-        bh.consume(obj?.value ?: steps[step++])
     }
+
+    [CompilerControl(CompilerControl.Mode.DONT_INLINE)]
+    fun withoutElvisWork(obj: Data?) = if (obj != null) obj.x else 1
 
     [Benchmark]
     public fun withoutElvis(bh: Blackhole) {
-        if (step > steps.size - 2) {
-            step = 0
+        val d = data
+        val size = this.size
+        for (i in 0..size - 1) {
+            val obj = d[i]
+            bh.consume(withoutElvisWork(obj))
         }
-        var next = steps[step++]
-        val obj = array[next]
-        bh.consume(if (obj != null) obj.value else steps[step++] )
-    }
-
-    public fun main(args: Array<String>) {
-        val opt = OptionsBuilder().include(".*" + javaClass<SimpleElvisTestKotlin>().getSimpleName() + ".*")?.forks(1)?.build()
-
-        Runner(opt).run()
     }
 }
 
