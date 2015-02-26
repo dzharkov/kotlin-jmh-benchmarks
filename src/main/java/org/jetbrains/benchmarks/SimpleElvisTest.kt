@@ -12,20 +12,16 @@ import java.util.Random
 import org.openjdk.jmh.infra.*
 
 
-/**
- * @author Denis Zharkov
- */
 [State(Scope.Benchmark)]
 [BenchmarkMode(Mode.AverageTime) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
 open public class SimpleElvisTestKotlin {
     data class Data(val x: Int)
 
-    //[Param("100", "1000", "1000000")]
-    [Param("1000")]
+    [Param("100", "1000", "1000000")]
     var size: Int = 0
 
-    [Param("0.5")]
+    [Param("0.1", "0.5", "0.9")]
     var nullFrequency: Double = 0.0
 
     var data: Array<Data?> = Array(1) { Data(1) }
