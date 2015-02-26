@@ -1,4 +1,4 @@
-package org.jetbrains.benchmarks;
+package org.jetbrains.benchmarks.inline;
 
 import org.openjdk.jmh.annotations.*;
 

@@ -1,4 +1,4 @@
-package org.jetbrains.benchmarks;
+package org.jetbrains.benchmarks.stars;
 
 import java.util.Random;
 

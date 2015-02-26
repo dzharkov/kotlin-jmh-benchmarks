@@ -2,6 +2,7 @@ package org.jetbrains.benchmarks
 
 import org.openjdk.jmh.annotations.*
 import java.util.concurrent.TimeUnit
+import org.jetbrains.benchmarks.ms.*
 
 [State(Scope.Thread)]
 [BenchmarkMode(Mode.AverageTime) ]

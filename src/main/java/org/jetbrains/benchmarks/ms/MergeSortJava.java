@@ -1,4 +1,4 @@
-package org.jetbrains.benchmarks;
+package org.jetbrains.benchmarks.ms;
 
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
