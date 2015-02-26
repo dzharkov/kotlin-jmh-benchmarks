@@ -9,164 +9,121 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class SwitchTestJava {
-    public static final int ITERATIONS = 100000000;
+    @Param({"100", "1000", "1000000"})
+    int iterations;
 
-    int sparseSwitch(int u) {
-        int t;
+    @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+    private int sparseSwitch(int u) {
         switch (u) {
-            case (1):
-                t = 1;
-                break;
-            case (100500):
-                t = 2;
-                break;
-            case (2):
-                t = 3;
-                break;
-            case (3):
-                t = 4;
-                break;
-            case (4):
-                t = 5;
-                break;
-            case (5):
-                t = 6;
-                break;
-            case (6):
-                t = 7;
-                break;
-            case (7):
-                t = 1;
-                break;
-            case (8):
-                t = 9;
-                break;
-            case (9):
-                t = 1;
-                break;
-            case (10):
-                t = 2;
-                break;
-            case (11):
-                t = 3;
-                break;
-            case (12):
-                t = 4;
-                break;
-            case (13):
-                t = 4;
-                break;
-            case (14):
-                t = 4;
-                break;
-            case (15):
-                t = 435;
-                break;
-            case (16):
-                t =31;
-                break;
-            case (17):
-                t = 1;
-                break;
-            case (18):
-                t = 1;
-                break;
-            case (19):
-                t = 1;
-                break;
-            case (20):
-                t = 1;
-                break;
+            case 1:
+                return 1;
+            case 100500:
+                return 2;
+            case 2:
+                return 3;
+            case 3:
+                return 4;
+            case 4:
+                return 5;
+            case 5:
+                return 6;
+            case 6:
+                return 7;
+            case 7:
+                return 1;
+            case 8:
+                return 9;
+            case 9:
+                return 1;
+            case 10:
+                return 2;
+            case 11:
+                return 3;
+            case 12:
+                return 4;
+            case 13:
+                return 4;
+            case 14:
+                return 4;
+            case 15:
+                return 435;
+            case 16:
+                return 31;
+            case 17:
+                return 1;
+            case 18:
+                return 1;
+            case 19:
+                return 1;
+            case 20:
+                return 1;
             default:
-                t = 5;
+                return 5;
         }
-
-        return t;
     }
 
     @Benchmark
     public void testSparseSwitch(Blackhole bh) {
-        for (int i = 0; i < ITERATIONS; i++) {
+        int n = iterations;
+        for (int i = 0; i < n; i++) {
             bh.consume(sparseSwitch(i));
         }
     }
 
-    int denseSwitch(int u) {
-        int t;
+    @CompilerControl(CompilerControl.Mode.DONT_INLINE)
+    private int denseSwitch(int u) {
         switch (u) {
-            case (1):
-                t = 1;
-                break;
+            case 1:
+                return 1;
             case (-1):
-                t = 2;
-                break;
-            case (2):
-                t = 3;
-                break;
-            case (3):
-                t = 4;
-                break;
-            case (4):
-                t = 5;
-                break;
-            case (5):
-                t = 6;
-                break;
-            case (6):
-                t = 7;
-                break;
-            case (7):
-                t = 1;
-                break;
-            case (8):
-                t = 9;
-                break;
-            case (9):
-                t = 1;
-                break;
-            case (10):
-                t = 2;
-                break;
-            case (11):
-                t = 3;
-                break;
-            case (12):
-                t = 4;
-                break;
-            case (13):
-                t = 4;
-                break;
-            case (14):
-                t = 4;
-                break;
-            case (15):
-                t = 435;
-                break;
-            case (16):
-                t =31;
-                break;
-            case (17):
-                t = 1;
-                break;
-            case (18):
-                t = 1;
-                break;
-            case (19):
-                t = 1;
-                break;
-            case (20):
-                t = 1;
-                break;
+                return 2;
+            case 2:
+                return 3;
+            case 3:
+                return 4;
+            case 4:
+                return 5;
+            case 5:
+                return 6;
+            case 6:
+                return 7;
+            case 7:
+                return 1;
+            case 8:
+                return 9;
+            case 9:
+                return 1;
+            case 10:
+                return 2;
+            case 11:
+                return 3;
+            case 12:
+                return 4;
+            case 13:
+                return 4;
+            case 14:
+                return 4;
+            case 15:
+                return 435;
+            case 16:
+                return 31;
+            case 17:
+                return 1;
+            case 18:
+                return 1;
+            case 19:
+                return 1;
+            case 20:
+                return 1;
             default:
-                t = 5;
+                return 5;
         }
-
-        return t;
     }
 
     @Benchmark
     public void testDenseSwitch(Blackhole bh) {
-        for (int i = 0; i < ITERATIONS; i++) {
+        int n = iterations;
+        for (int i = 0; i < n; i++) {
             bh.consume(denseSwitch(i));
         }
     }
