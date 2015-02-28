@@ -14,7 +14,7 @@ import org.openjdk.jmh.infra.*
 [State(Scope.Benchmark)]
 [BenchmarkMode(Mode.AverageTime) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
-open public class SimpleElvisTestKotlin {
+open public class SimpleSafeCallWithElvisBenchmark {
     data class Data(val x: Int)
 
     [Param("100", "1000", "1000000")]

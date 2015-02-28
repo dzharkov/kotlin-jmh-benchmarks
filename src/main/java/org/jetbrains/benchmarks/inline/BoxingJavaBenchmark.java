@@ -7,16 +7,16 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-public class BoxingTestJava {
+public class BoxingJavaBenchmark {
     public int value = 12345678;
 
     @Benchmark
-    public int testWithBoxingMethod() {
+    public int benchmarkWithBoxingMethod() {
         return Integer.valueOf(value *= 3).intValue();
     }
 
     @Benchmark
-    public int testWithoutBoxingMethod() {
+    public int benchmarkWithoutBoxingMethod() {
         return value *= 3;
     }
 }

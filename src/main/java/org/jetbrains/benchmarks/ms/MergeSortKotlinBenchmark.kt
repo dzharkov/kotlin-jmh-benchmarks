@@ -7,9 +7,9 @@ import org.jetbrains.benchmarks.ms.*
 [State(Scope.Thread)]
 [BenchmarkMode(Mode.AverageTime) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
-open class MergeSortKotlin {
+open class MergeSortKotlinBenchmark {
     public class object {
-        public val size : Int = MergeSortJava.SIZE
+        public val size : Int = MergeSortJavaBenchmark.SIZE
     }
     val helper = IntArray(size)
 
@@ -47,7 +47,7 @@ open class MergeSortKotlin {
     }
 
     [Benchmark]
-    fun testMethod() {
+    fun benchmarkMethod() {
         val size = size
         val a = IntArray(size)
         for (i in 0..size-1) {

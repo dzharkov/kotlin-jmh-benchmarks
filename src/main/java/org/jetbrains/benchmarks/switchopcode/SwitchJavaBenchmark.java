@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-public class SwitchTestJava {
+public class SwitchJavaBenchmark {
     @Param({"100", "1000", "1000000"})
     int iterations;
 
@@ -63,7 +63,7 @@ public class SwitchTestJava {
     }
 
     @Benchmark
-    public void testSparseSwitch(Blackhole bh) {
+    public void benchmarkSparseSwitch(Blackhole bh) {
         int n = iterations;
         for (int i = 0; i < n; i++) {
             bh.consume(sparseSwitch(i));
@@ -121,7 +121,7 @@ public class SwitchTestJava {
     }
 
     @Benchmark
-    public void testDenseSwitch(Blackhole bh) {
+    public void benchmarkDenseSwitch(Blackhole bh) {
         int n = iterations;
         for (int i = 0; i < n; i++) {
             bh.consume(denseSwitch(i));
@@ -197,7 +197,7 @@ public class SwitchTestJava {
     }
 
     @Benchmark
-    public void testEnumSwitch(Blackhole bh) {
+    public void benchmarkEnumSwitch(Blackhole bh) {
         MyEnum[] localEnums = enums;
         int n = iterations;
         for (int i = 0; i < n; i++) {
@@ -273,7 +273,7 @@ public class SwitchTestJava {
     }
 
     @Benchmark
-    public void testStringSwitch(Blackhole bh) {
+    public void benchmarkStringSwitch(Blackhole bh) {
         String localStrings[] = strings;
         int n = iterations;
         for (int i = 0; i < n; i++) {

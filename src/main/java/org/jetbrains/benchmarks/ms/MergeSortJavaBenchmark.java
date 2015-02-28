@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-public class MergeSortJava {
+public class MergeSortJavaBenchmark {
     public static final int SIZE = 1000000;
     private int size = SIZE;
     private int[] helper = new int[size];
@@ -50,7 +50,7 @@ public class MergeSortJava {
     }
 
     @Benchmark
-    public void testMethod() {
+    public void benchmarkMethod() {
         int size = this.size;
         int[] a = new int[size];
         for (int i = 0; i < size; i++) {

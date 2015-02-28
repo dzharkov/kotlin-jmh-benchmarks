@@ -6,5 +6,5 @@ import java.util.concurrent.TimeUnit
 [State(Scope.Thread)]
 [BenchmarkMode(Mode.AverageTime) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
-open class InliningTest {
+open class InliningBenchmark {
 }
