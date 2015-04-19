@@ -1,19 +1,36 @@
-package org.jetbrains.benchmarks
+package org.jetbrains.benchmarks.ms
 
 import org.openjdk.jmh.annotations.*
+import org.openjdk.jmh.infra.Blackhole
+import org.openjdk.jmh.runner.Runner
+import org.openjdk.jmh.runner.RunnerException
+import org.openjdk.jmh.runner.options.Options
+import org.openjdk.jmh.runner.options.OptionsBuilder
+
+import java.util.Random
 import java.util.concurrent.TimeUnit
-import org.jetbrains.benchmarks.ms.*
 
-[State(Scope.Thread)]
-[BenchmarkMode(Mode.AverageTime) ]
-[OutputTimeUnit(TimeUnit.NANOSECONDS)]
-open class MergeSortKotlinBenchmark {
-    public class object {
-        public val size : Int = MergeSortJavaBenchmark.SIZE
+State(Scope.Thread)
+BenchmarkMode(Mode.AverageTime)
+OutputTimeUnit(TimeUnit.NANOSECONDS)
+open public class MergeSortKotlinBenchmark {
+    Param("100", "1000", "1000000")
+    var size: Int = 0
+
+    private var data: IntArray = IntArray(0)
+    private var helper: IntArray = IntArray(1)
+
+    Setup
+    public fun init() {
+        helper = IntArray(size)
+        data = IntArray(size)
+        val random = Random(123)
+        for (i in 0..size - 1) {
+            data[i] = random.nextInt()
+        }
     }
-    val helper = IntArray(size)
 
-    fun mergeSort(a : IntArray, from : Int, to : Int) {
+    private fun mergeSort(a: IntArray, from: Int, to: Int) {
         if (from >= to) {
             return
         }
@@ -21,11 +38,11 @@ open class MergeSortKotlinBenchmark {
         val m = (from + to) / 2
 
         mergeSort(a, from, m)
-        mergeSort(a, m+1, to)
+        mergeSort(a, m + 1, to)
 
         var k = 0
         var i = from
-        var j = m+1
+        var j = m + 1
 
         while (i <= m && j <= to) {
             if (a[i] < a[j]) {
@@ -46,21 +63,12 @@ open class MergeSortKotlinBenchmark {
         System.arraycopy(helper, 0, a, from, k)
     }
 
-    [Benchmark]
-    fun benchmarkMethod() {
-        val size = size
-        val a = IntArray(size)
-        for (i in 0..size-1) {
-            a[i] = size-i
-        }
+    Benchmark
+    public fun benchmarkMethod(bh: Blackhole) {
+        val a = data
+        val size = this.size
+        mergeSort(a, 0, size - 1)
 
-        mergeSort(a, 0, size-1)
-
-        for (i in 1..size-1) {
-            if (a[i] < a[i-1]) {
-                throw RuntimeException("fsdfds")
-            }
-        }
+        bh.consume(a)
     }
-
 }

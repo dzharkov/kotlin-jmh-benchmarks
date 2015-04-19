@@ -1,20 +1,34 @@
 package org.jetbrains.benchmarks.ms;
 
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 public class MergeSortJavaBenchmark {
-    public static final int SIZE = 1000000;
-    private int size = SIZE;
-    private int[] helper = new int[size];
+    @Param({"100", "1000", "1000000"})
+    int size;
+
+    private int[] data;
+    private int[] helper;
+
+    @Setup
+    public void init() {
+        helper = new int[size];
+        data = new int[size];
+        Random random = new Random(123);
+        for (int i = 0; i < size; i++) {
+            data[i] = random.nextInt();
+        }
+    }
 
     private void mergeSort(int[] a, int from, int to) {
         if (from >= to) {
@@ -50,19 +64,11 @@ public class MergeSortJavaBenchmark {
     }
 
     @Benchmark
-    public void benchmarkMethod() {
+    public void benchmarkMethod(Blackhole bh) {
+        int[] a = data;
         int size = this.size;
-        int[] a = new int[size];
-        for (int i = 0; i < size; i++) {
-            a[i] = size-i;
-        }
-
         mergeSort(a, 0, size - 1);
 
-        for (int i = 1; i < size; i++) {
-            if (a[i] < a[i - 1]) {
-                throw new RuntimeException();
-            }
-        }
+        bh.consume(a);
     }
 }
