@@ -13,9 +13,8 @@ class PointY(var y: Int, var id: Int) : Comparable<PointY> {
     }
 }
 
-fun solve(bh: Blackhole, ng: NodeInfo): Unit {
+fun solve(bh: Blackhole, ng: NodeInfo, n: Int) {
     val tree = KotlinAVLTree<PointY, Int>(compareBy { it }, ng)
-    val n = StarsData.getN()
     val result = IntArray(n)
     for (i in 0..n - 1) {
         val y = StarsData.getX()

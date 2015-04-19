@@ -20,6 +20,14 @@ public class StarsJava {
         }
     }
 
+    @Param({"100", "1000", "100000"})
+    int size;
+
+    @Setup
+    public void init() {
+        StarsData.init();
+    }
+
     class AVLTree<K,D> {
         class Node<K,D> {
             K key;
@@ -274,7 +282,7 @@ public class StarsJava {
     public void solve(Blackhole bh) {
         OrderAVLTree<PointY,Integer> tree = new OrderAVLTree<PointY, Integer>(new ComparableComparator<PointY>());
 
-        int n = StarsData.getN();
+        int n = size;
         int[] result = new int[n];
 
         for (int i = 0; i < n; i++) {

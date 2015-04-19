@@ -9,14 +9,21 @@ import java.util.concurrent.TimeUnit
 [BenchmarkMode(Mode.AverageTime)]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
 open public class StarsKotlin() {
+    Param("100", "1000", "100000")
+    var size: Int = 1
+
+    Setup fun init() {
+        StarsData.init()
+    }
+
     object BaseNodeInfo : NodeInfo() {
         override fun height(node: KotlinAVLTree.Node<*, *>?) = node?.height ?: 0
         override fun size(node: KotlinAVLTree.Node<*, *>?) = node?.size ?: 0
     }
 
-    [Benchmark]
+    Benchmark
     public fun baseBenchmark(bh: Blackhole) {
-        solve(bh, BaseNodeInfo)
+        solve(bh, BaseNodeInfo, size)
     }
 
     object FasterNodeInfo : NodeInfo() {
@@ -24,8 +31,8 @@ open public class StarsKotlin() {
         override fun size(node : KotlinAVLTree.Node<*,*>?) = if (node != null) node.size else 0
     }
 
-    [Benchmark]
+    Benchmark
     public fun baseBenchmarkFaster(bh: Blackhole) {
-        solve(bh, FasterNodeInfo)
+        solve(bh, FasterNodeInfo, size)
     }
 }
