@@ -17,45 +17,34 @@ import org.openjdk.jmh.infra.*
 open public class SimpleSafeCallWithElvisBenchmark {
     data class Data(val x: Int)
 
-    [Param("100", "1000", "1000000")]
-    var size: Int = 0
+    var size: Int = 1000000
 
     [Param("0.1", "0.5", "0.9")]
     var nullFrequency: Double = 0.0
 
     var data: Array<Data?> = Array(1) { Data(1) }
+    private var step = 0
 
-    Setup fun init() {
+    Setup(Level.Iteration) fun init() {
         val random = Random(123)
+        step = 0
         data = Array(size) {
             if (random.nextDouble() < nullFrequency) null else Data(random.nextInt())
         }
     }
 
-    [CompilerControl(CompilerControl.Mode.DONT_INLINE)]
-    fun withElvisWork(obj: Data?) = obj?.x ?: 1
-
     [Benchmark]
-    public fun withElvis(bh: Blackhole) {
-        val d = data
-        val size = this.size
-        for (i in 0..size - 1) {
-            val obj = d[i]
-            bh.consume(withElvisWork(obj))
-        }
+    public fun withElvis(): Int {
+        step = (step + 1) % size
+        val obj = data[step]
+        return obj?.x ?: 1
     }
 
-    [CompilerControl(CompilerControl.Mode.DONT_INLINE)]
-    fun withoutElvisWork(obj: Data?) = if (obj != null) obj.x else 1
-
     [Benchmark]
-    public fun withoutElvis(bh: Blackhole) {
-        val d = data
-        val size = this.size
-        for (i in 0..size - 1) {
-            val obj = d[i]
-            bh.consume(withoutElvisWork(obj))
-        }
+    public fun withoutElvis(): Int {
+        step = (step + 1) % size
+        val obj = data[step]
+        return if (obj != null) obj.x else 1
     }
 }
 
