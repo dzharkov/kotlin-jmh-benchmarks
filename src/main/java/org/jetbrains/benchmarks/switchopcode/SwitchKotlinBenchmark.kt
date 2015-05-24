@@ -10,8 +10,7 @@ import org.openjdk.jmh.infra.*
 [BenchmarkMode(Mode.AverageTime) ]
 [OutputTimeUnit(TimeUnit.NANOSECONDS)]
 public open class SwitchKotlinBenchmark() {
-    [Param("100", "1000", "1000000")]
-    var iterations: Int = 0
+    var iterations: Int = 1000
 
     [CompilerControl(CompilerControl.Mode.DONT_INLINE)]
     private fun sparseSwitch(u : Int): Int {
@@ -88,8 +87,10 @@ public open class SwitchKotlinBenchmark() {
     [Benchmark]
     public open fun benchmarkSparseSwitch(bh : Blackhole) {
         val n = iterations
-        for (i in 0..n - 1) {
+        var i = 0
+        while (i < n) {
             bh.consume(sparseSwitch(i))
+            i++
         }
     }
 
@@ -167,8 +168,10 @@ public open class SwitchKotlinBenchmark() {
     [Benchmark]
     public open fun benchmarkDenseSwitch(bh : Blackhole) {
         val n = iterations
-        for (i in 0..n - 1) {
+        var i = 0
+        while (i < n) {
             bh.consume(denseSwitch(i))
+            i++
         }
     }
 
@@ -242,8 +245,10 @@ public open class SwitchKotlinBenchmark() {
     public fun benchmarkEnumSwitch(bh: Blackhole) {
         val localEnums = enums
         val n = iterations
-        for (i in 0..n - 1) {
+        var i = 0
+        while (i < n) {
             bh.consume(enumSwitch(localEnums[i]))
+            i++
         }
     }
 
@@ -317,8 +322,10 @@ public open class SwitchKotlinBenchmark() {
     public fun benchmarkStringSwitch(bh: Blackhole) {
         val localStrings = strings
         val n = iterations
-        for (i in 0..n - 1) {
+        var i = 0
+        while (i < n) {
             bh.consume(stringSwitch(localStrings[i]))
+            i++
         }
     }
 }
